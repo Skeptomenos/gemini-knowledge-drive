@@ -1,0 +1,42 @@
+@import "tailwindcss";
+
+/*
+ * Gemini Knowledge Drive - Base Styles
+ * Dark mode is the default per spec 04_ui_ux_design.md
+ */
+
+@theme {
+  /* Custom color palette for GKD */
+  --color-gkd-bg: #0f0f0f;
+  --color-gkd-surface: #1a1a1a;
+  --color-gkd-surface-hover: #242424;
+  --color-gkd-border: #2a2a2a;
+  --color-gkd-text: rgba(255, 255, 255, 0.87);
+  --color-gkd-text-muted: rgba(255, 255, 255, 0.6);
+  --color-gkd-accent: #646cff;
+  --color-gkd-accent-hover: #535bf2;
+}
+
+/* Base styles */
+:root {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  color-scheme: dark;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  background-color: var(--color-gkd-bg);
+  color: var(--color-gkd-text);
+}
+
+#root {
+  min-height: 100vh;
+}

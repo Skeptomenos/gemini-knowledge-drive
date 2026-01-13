@@ -9,7 +9,7 @@
 - "Local is Fast" - Mirror metadata to browser's IndexedDB for sub-100ms navigation.
 - "Markdown is King" - First-class support for GFM, Frontmatter, and Wiki-links.
 
-**Status:** Phase 1 Complete - Foundation & Authentication implemented.
+**Status:** GREENFIELD - No source code exists yet.
 
 ---
 
@@ -268,14 +268,14 @@ Phase 6 (Graph & Search) ◄── Depends on wikilink parsing from Phase 4 ─�
 
 ## Next Actions
 
-1. [x] **Phase 1**: Scaffold project with Vite + React 19 + TypeScript
-2. [x] **Phase 1**: Configure Tailwind CSS with dark mode
-3. [x] **Phase 1**: Set up Firebase Hosting
-4. [x] **Phase 1**: Implement Google OAuth flow
+1. [ ] **Phase 1**: Scaffold project with Vite + React 19 + TypeScript
+2. [ ] **Phase 1**: Configure Tailwind CSS with dark mode
+3. [ ] **Phase 1**: Set up Firebase Hosting
+4. [ ] **Phase 1**: Implement Google OAuth flow
 5. [ ] **Phase 2**: Define Dexie schema and implement SyncManager
 6. [ ] Continue through phases sequentially...
 
 ---
 
 *Generated: 2026-01-13*
-*Status: Phase 1 Complete - Ready for Phase 2*
+*Status: Planning Complete - Ready for Implementation*
