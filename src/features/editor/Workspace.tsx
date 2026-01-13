@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { useAuth } from '@/features/auth';
 import { getFileContentWithMetadata } from '@/features/drive/api';
 import { useUIStore } from '@/stores/uiStore';
-import { MarkdownPreview } from '@/features/viewer';
+import { MarkdownPreview, OutlinePanel } from '@/features/viewer';
 import { MonacoWrapper } from './MonacoWrapper';
 
 interface WorkspaceProps {
@@ -129,13 +129,18 @@ export function Workspace({ fileId }: WorkspaceProps) {
         </div>
       </div>
 
-      <div className="flex-1 overflow-hidden">
+      <div className="flex-1 overflow-hidden flex">
         {viewMode === 'read' ? (
-          <div className="h-full overflow-auto p-6">
-            <div className="max-w-3xl mx-auto">
-              <MarkdownPreview fileId={fileId} />
+          <>
+            <div className="flex-1 h-full overflow-auto p-6">
+              <div className="max-w-3xl mx-auto">
+                <MarkdownPreview fileId={fileId} />
+              </div>
             </div>
-          </div>
+            <div className="w-56 border-l border-gkd-border overflow-auto hidden lg:block">
+              <OutlinePanel content={content} />
+            </div>
+          </>
         ) : (
           <MonacoWrapper
             fileId={fileId}

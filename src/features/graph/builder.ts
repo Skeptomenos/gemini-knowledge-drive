@@ -191,3 +191,105 @@ export async function getBacklinks(fileId: string): Promise<BacklinkInfo[]> {
 function escapeRegex(str: string): string {
   return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
+
+export interface FileAnalytics {
+  fileId: string;
+  fileName: string;
+  backlinkCount: number;
+}
+
+export async function getOrphanFiles(): Promise<FileAnalytics[]> {
+  const files = await db.files
+    .where('mimeType')
+    .equals('text/markdown')
+    .and((f) => !f.trashed)
+    .toArray();
+
+  const filesByName = new Map<string, FileNode>();
+  const filesByAlias = new Map<string, FileNode>();
+  
+  for (const file of files) {
+    const baseName = file.name.replace(/\.md$/i, '').toLowerCase();
+    filesByName.set(baseName, file);
+    
+    for (const alias of file.aliases) {
+      filesByAlias.set(alias.toLowerCase(), file);
+    }
+  }
+
+  const linkedFileIds = new Set<string>();
+
+  for (const file of files) {
+    if (!file.contentSnippet) continue;
+    
+    const wikilinks = extractWikilinks(file.contentSnippet);
+    
+    for (const linkTarget of wikilinks) {
+      const targetLower = linkTarget.toLowerCase();
+      const targetFile = filesByName.get(targetLower) || filesByAlias.get(targetLower);
+      
+      if (targetFile && targetFile.id !== file.id) {
+        linkedFileIds.add(targetFile.id);
+      }
+    }
+  }
+
+  return files
+    .filter((f) => !linkedFileIds.has(f.id))
+    .map((f) => ({
+      fileId: f.id,
+      fileName: f.name.replace(/\.md$/i, ''),
+      backlinkCount: 0,
+    }));
+}
+
+export async function getMostCitedFiles(limit: number = 10): Promise<FileAnalytics[]> {
+  const files = await db.files
+    .where('mimeType')
+    .equals('text/markdown')
+    .and((f) => !f.trashed)
+    .toArray();
+
+  const filesByName = new Map<string, FileNode>();
+  const filesByAlias = new Map<string, FileNode>();
+  
+  for (const file of files) {
+    const baseName = file.name.replace(/\.md$/i, '').toLowerCase();
+    filesByName.set(baseName, file);
+    
+    for (const alias of file.aliases) {
+      filesByAlias.set(alias.toLowerCase(), file);
+    }
+  }
+
+  const backlinkCounts = new Map<string, number>();
+
+  for (const file of files) {
+    if (!file.contentSnippet) continue;
+    
+    const wikilinks = extractWikilinks(file.contentSnippet);
+    
+    for (const linkTarget of wikilinks) {
+      const targetLower = linkTarget.toLowerCase();
+      const targetFile = filesByName.get(targetLower) || filesByAlias.get(targetLower);
+      
+      if (targetFile && targetFile.id !== file.id) {
+        backlinkCounts.set(
+          targetFile.id, 
+          (backlinkCounts.get(targetFile.id) || 0) + 1
+        );
+      }
+    }
+  }
+
+  const fileMap = new Map(files.map((f) => [f.id, f]));
+
+  return [...backlinkCounts.entries()]
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, limit)
+    .map(([fileId, count]) => ({
+      fileId,
+      fileName: fileMap.get(fileId)?.name.replace(/\.md$/i, '') || 'Unknown',
+      backlinkCount: count,
+    }));
+}

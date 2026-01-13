@@ -38,6 +38,21 @@ export function MarkdownPreview({ fileId }: MarkdownPreviewProps) {
         const result = parseMarkdown(content);
         setParsed(result);
         setState('success');
+
+        // Lazy extraction: Update DB with frontmatter tags/aliases
+        const { tags, aliases } = result.frontmatter;
+        if (tags || aliases) {
+          const updates: Partial<{ tags: string[]; aliases: string[] }> = {};
+          if (tags && Array.isArray(tags)) {
+            updates.tags = tags.map(String);
+          }
+          if (aliases && Array.isArray(aliases)) {
+            updates.aliases = aliases.map(String).map(a => a.toLowerCase());
+          }
+          if (Object.keys(updates).length > 0) {
+            await db.files.update(fileId, updates);
+          }
+        }
       } catch (err) {
         if (cancelled) return;
         setError(err instanceof Error ? err.message : 'Failed to load file');

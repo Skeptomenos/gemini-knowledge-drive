@@ -382,6 +382,24 @@ Phase 6 (Graph & Search) ◄── Depends on wikilink parsing from Phase 4 ─�
 
 ---
 
+## Phase 11: P2 Features & Analytics (COMPLETE)
+**Goal:** Implement remaining P2 features for enhanced user experience.
+**Spec Reference:** `04_ui_ux_design.md`, `07_graph_and_analytics.md`
+
+| Priority | Task | Files | Deliverable |
+|----------|------|-------|-------------|
+| DONE | Frontmatter extraction (lazy) | `src/features/viewer/MarkdownPreview.tsx` | Tags/aliases extracted on file view and persisted to DB |
+| DONE | ThemeToggle component | `src/components/ui/ThemeToggle.tsx`, `src/features/navigation/Sidebar.tsx` | Quick theme cycling button in sidebar |
+| DONE | Outline (ToC) panel | `src/features/viewer/OutlinePanel.tsx`, `src/features/editor/Workspace.tsx` | H1-H6 navigation in read mode |
+| DONE | Orphan detection | `src/features/graph/builder.ts`, `src/features/graph/AnalyticsPanel.tsx` | List files with 0 backlinks |
+| DONE | Most Cited analytics | `src/features/graph/builder.ts`, `src/features/graph/AnalyticsPanel.tsx` | Top 10 linked files display |
+| DEFERRED | Paste image upload | - | Requires Drive file upload API (future phase) |
+| DEFERRED | Prettier formatting | - | Requires prettier integration (future phase) |
+
+**Checkpoint:** Graph sidebar shows analytics (orphans, most cited), ToC panel in viewer. ✅ COMPLETE
+
+---
+
 *Generated: 2026-01-13*
 *Updated: 2026-01-14*
-*Status: Phase 10 Complete - Polish & P1 Completion implemented*
+*Status: Phase 11 Complete - P2 Features & Analytics implemented*
