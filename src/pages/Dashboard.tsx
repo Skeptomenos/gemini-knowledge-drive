@@ -8,6 +8,7 @@ import { Sidebar, Breadcrumbs } from '@/features/navigation';
 import { Workspace } from '@/features/editor';
 import { CommandPalette, searchIndex } from '@/features/search';
 import { GraphView } from '@/features/graph';
+import { SettingsModal } from '@/components/settings/SettingsModal';
 import { useUIStore } from '@/stores/uiStore';
 
 function Header({ onOpenSearch }: { onOpenSearch: () => void }) {
@@ -252,6 +253,7 @@ export function Dashboard() {
   const { id } = useParams<{ id: string }>();
   const { setActiveFileId, sidebarMode } = useUIStore();
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
 
   useEffect(() => {
     setActiveFileId(id ?? null);
@@ -261,6 +263,10 @@ export function Dashboard() {
     if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
       e.preventDefault();
       setIsSearchOpen(true);
+    }
+    if ((e.metaKey || e.ctrlKey) && e.key === ',') {
+      e.preventDefault();
+      setIsSettingsOpen(true);
     }
   }, []);
 
@@ -275,10 +281,11 @@ export function Dashboard() {
     <>
       <AppShell
         header={<Header onOpenSearch={() => setIsSearchOpen(true)} />}
-        sidebar={<Sidebar />}
+        sidebar={<Sidebar onOpenSettings={() => setIsSettingsOpen(true)} />}
         main={<MainContent viewType={viewType} />}
       />
       <CommandPalette isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
+      <SettingsModal isOpen={isSettingsOpen} onClose={() => setIsSettingsOpen(false)} />
     </>
   );
 }

@@ -9,7 +9,7 @@
 - "Local is Fast" - Mirror metadata to browser's IndexedDB for sub-100ms navigation.
 - "Markdown is King" - First-class support for GFM, Frontmatter, and Wiki-links.
 
-**Status:** Phase 6 Complete - All core features implemented (Search, Graph, Backlinks).
+**Status:** Phase 7 Complete - Settings & Preferences implemented. Next: Onboarding & Empty States.
 
 ---
 
@@ -308,9 +308,48 @@ Phase 6 (Graph & Search) ◄── Depends on wikilink parsing from Phase 4 ─�
     - Created GraphView component with react-force-graph-2d
     - Created BacklinksPanel showing linked mentions
     - Wired up search and graph into Dashboard
+13. [x] **Phase 7**: Settings & Preferences
+    - Created preferencesStore.ts with Zustand + localStorage persistence
+    - Created SettingsModal.tsx with Drive, Appearance, Editor, Shortcuts sections
+    - Added Cmd+, keyboard shortcut and gear icon in sidebar
+    - Wired preferences to Monaco editor (font size, word wrap, minimap, line numbers)
+    - Theme toggle (Dark/Light/System) with Tailwind dark mode support
+
+---
+
+## Phase 8: Onboarding & Empty States (NEXT)
+**Goal:** First-time user experience and graceful empty state handling.
+**Spec Reference:** `09_onboarding_and_empty_states.md`
+
+| Priority | Task | Files | Deliverable |
+|----------|------|-------|-------------|
+| P0 | EmptyState component | `src/components/ui/EmptyState.tsx` | Reusable empty state with icon, message, action |
+| P0 | WelcomeFlow wizard | `src/features/onboarding/WelcomeFlow.tsx` | First-time Drive selection + sync progress |
+| P1 | Empty file tree state | `src/features/navigation/FileTree.tsx` | "No markdown files" message |
+| P1 | Empty search results | `src/features/search/CommandPalette.tsx` | Improved "No results" message |
+| P1 | Empty backlinks panel | `src/features/graph/BacklinksPanel.tsx` | "No backlinks yet" message |
+
+**Checkpoint:** New users see welcome wizard, empty states are informative.
+
+---
+
+## Phase 9: Error Handling & Offline
+**Goal:** Robust error recovery and offline capabilities.
+**Spec Reference:** `10_error_handling_and_offline.md`
+
+| Priority | Task | Files | Deliverable |
+|----------|------|-------|-------------|
+| P0 | ErrorBoundary component | `src/components/ui/ErrorBoundary.tsx` | Catch and display component errors |
+| P0 | Toast notification system | `src/components/ui/Toast.tsx` | Non-blocking error/success messages |
+| P0 | Network state store | `src/stores/networkStore.ts` | Online/offline detection |
+| P1 | Offline indicator | `src/components/layout/AppShell.tsx` | "You're offline" banner |
+| P1 | Pending changes queue | `src/lib/db/schema.ts` | `pendingChanges` table for offline edits |
+| P2 | Retry logic | `src/lib/error-handler.ts` | Exponential backoff for API calls |
+
+**Checkpoint:** App handles errors gracefully, works offline with queued changes.
 
 ---
 
 *Generated: 2026-01-13*
-*Updated: 2026-01-13*
-*Status: Phase 6 Complete - All core features implemented*
+*Updated: 2026-01-14*
+*Status: Phase 7 Complete - Settings & Preferences implemented*

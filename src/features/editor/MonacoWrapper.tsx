@@ -5,6 +5,7 @@ import debounce from 'lodash/debounce';
 import { useAuth } from '@/features/auth';
 import { updateFileContent } from '@/features/drive/api';
 import { useUIStore } from '@/stores/uiStore';
+import { usePreferencesStore } from '@/stores/preferencesStore';
 import { registerWikilinkCompletion } from './autocomplete';
 
 interface MonacoWrapperProps {
@@ -13,11 +14,10 @@ interface MonacoWrapperProps {
   onContentChange?: (content: string) => void;
 }
 
-const AUTOSAVE_DELAY_MS = 2000;
-
 export function MonacoWrapper({ fileId, initialContent, onContentChange }: MonacoWrapperProps) {
   const { accessToken } = useAuth();
   const { setIsDirty, setSaveStatus } = useUIStore();
+  const { fontSize, fontFamily, wordWrap, minimap, lineNumbers, autoSaveDelay } = usePreferencesStore();
   const editorRef = useRef<editor.IStandaloneCodeEditor | null>(null);
   const contentRef = useRef(initialContent);
   const fileIdRef = useRef(fileId);
@@ -41,10 +41,12 @@ export function MonacoWrapper({ fileId, initialContent, onContentChange }: Monac
     }
   }, [accessToken, setSaveStatus, setIsDirty]);
 
+  const autoSaveDelayMs = autoSaveDelay * 1000;
+  
   const debouncedSave = useRef(
     debounce((content: string) => {
       saveToServer(content);
-    }, AUTOSAVE_DELAY_MS)
+    }, autoSaveDelayMs)
   ).current;
 
   useEffect(() => {
@@ -85,11 +87,11 @@ export function MonacoWrapper({ fileId, initialContent, onContentChange }: Monac
         onMount={handleMount}
         onChange={handleChange}
         options={{
-          minimap: { enabled: true },
-          wordWrap: 'on',
-          fontFamily: "'JetBrains Mono', 'Fira Code', Consolas, monospace",
-          fontSize: 14,
-          lineNumbers: 'on',
+          minimap: { enabled: minimap },
+          wordWrap: wordWrap ? 'on' : 'off',
+          fontFamily: fontFamily === 'system-ui' ? 'system-ui, sans-serif' : `'${fontFamily}', monospace`,
+          fontSize: fontSize,
+          lineNumbers: lineNumbers ? 'on' : 'off',
           renderWhitespace: 'selection',
           scrollBeyondLastLine: false,
           automaticLayout: true,
