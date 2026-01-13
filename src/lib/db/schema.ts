@@ -45,25 +45,52 @@ export interface SyncState {
 }
 
 /**
+ * PendingChange represents a queued offline change.
+ * Stored when network is unavailable, processed on reconnect.
+ * Spec Reference: specs/10_error_handling_and_offline.md
+ */
+export interface PendingChange {
+  /** Auto-incrementing local ID (primary key) */
+  id?: number;
+  /** Drive File ID this change applies to */
+  fileId: string;
+  /** Type of change operation */
+  type: 'create' | 'update' | 'delete';
+  /** The content or metadata changes to apply */
+  content?: string;
+  /** Timestamp when the change was queued */
+  timestamp: number;
+  /** Number of retry attempts */
+  retryCount: number;
+  /** Last error message if retry failed */
+  lastError?: string;
+}
+
+/**
  * KnowledgeDB - Dexie database for local Drive metadata cache.
  * 
  * Tables:
  * - files: FileNode records indexed by id, name, parents, mimeType, modifiedTime
  * - syncState: Single SyncState record tracking sync progress
+ * - pendingChanges: Queued offline changes awaiting sync
  */
 export class KnowledgeDB extends Dexie {
   files!: EntityTable<FileNode, 'id'>;
   syncState!: EntityTable<SyncState, 'key'>;
+  pendingChanges!: EntityTable<PendingChange, 'id'>;
 
   constructor() {
     super('KnowledgeDB');
 
     this.version(1).stores({
-      // Primary key is 'id', with indexes on name, parents, mimeType, modifiedTime
-      // Multi-entry index on parents and tags for array fields
       files: 'id, name, *parents, mimeType, modifiedTime, *tags, *aliases, trashed',
-      // Primary key is 'key' (always "main")
       syncState: 'key',
+    });
+
+    this.version(2).stores({
+      files: 'id, name, *parents, mimeType, modifiedTime, *tags, *aliases, trashed',
+      syncState: 'key',
+      pendingChanges: '++id, fileId, type, timestamp',
     });
   }
 }

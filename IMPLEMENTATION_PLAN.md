@@ -9,7 +9,7 @@
 - "Local is Fast" - Mirror metadata to browser's IndexedDB for sub-100ms navigation.
 - "Markdown is King" - First-class support for GFM, Frontmatter, and Wiki-links.
 
-**Status:** Phase 8 Complete - Onboarding & Empty States implemented. Next: Error Handling & Offline.
+**Status:** Phase 9 Complete - Error Handling & Offline implemented.
 
 ---
 
@@ -322,6 +322,15 @@ Phase 6 (Graph & Search) ◄── Depends on wikilink parsing from Phase 4 ─�
     - Updated BacklinksPanel.tsx with EmptyState for "No backlinks" state
     - Updated GraphView.tsx with EmptyState for "No connections" state
     - Integrated WelcomeFlow into Dashboard.tsx for first-time users
+15. [x] **Phase 9**: Error Handling & Offline
+    - Updated Dexie schema to v2 with PendingChange interface and pendingChanges table
+    - Created networkStore.ts with online/offline detection via navigator.onLine + events
+    - Created Toast.tsx notification system with success/error/warning/info variants
+    - Created ErrorBoundary.tsx component with "Try Again" and "Reload Page" buttons
+    - Updated AppShell.tsx with offline indicator banner
+    - Created error-handler.ts with exponential backoff, error categorization, and retry logic
+    - Wrapped Sidebar, MainContent, and GraphView in ErrorBoundary
+    - Initialized network listener and global error handlers in main.tsx
 
 ---
 
@@ -342,23 +351,23 @@ Phase 6 (Graph & Search) ◄── Depends on wikilink parsing from Phase 4 ─�
 
 ---
 
-## Phase 9: Error Handling & Offline
+## Phase 9: Error Handling & Offline (COMPLETE)
 **Goal:** Robust error recovery and offline capabilities.
 **Spec Reference:** `10_error_handling_and_offline.md`
 
 | Priority | Task | Files | Deliverable |
 |----------|------|-------|-------------|
-| P0 | ErrorBoundary component | `src/components/ui/ErrorBoundary.tsx` | Catch and display component errors |
-| P0 | Toast notification system | `src/components/ui/Toast.tsx` | Non-blocking error/success messages |
-| P0 | Network state store | `src/stores/networkStore.ts` | Online/offline detection |
-| P1 | Offline indicator | `src/components/layout/AppShell.tsx` | "You're offline" banner |
-| P1 | Pending changes queue | `src/lib/db/schema.ts` | `pendingChanges` table for offline edits |
-| P2 | Retry logic | `src/lib/error-handler.ts` | Exponential backoff for API calls |
+| DONE | ErrorBoundary component | `src/components/ui/ErrorBoundary.tsx` | Catch and display component errors |
+| DONE | Toast notification system | `src/components/ui/Toast.tsx` | Non-blocking error/success messages |
+| DONE | Network state store | `src/stores/networkStore.ts` | Online/offline detection |
+| DONE | Offline indicator | `src/components/layout/AppShell.tsx` | "You're offline" banner |
+| DONE | Pending changes queue | `src/lib/db/schema.ts` | `pendingChanges` table for offline edits |
+| DONE | Retry logic | `src/lib/error-handler.ts` | Exponential backoff for API calls |
 
-**Checkpoint:** App handles errors gracefully, works offline with queued changes.
+**Checkpoint:** App handles errors gracefully, works offline with queued changes. ✅ COMPLETE
 
 ---
 
 *Generated: 2026-01-13*
 *Updated: 2026-01-14*
-*Status: Phase 8 Complete - Onboarding & Empty States implemented*
+*Status: Phase 9 Complete - Error Handling & Offline implemented*

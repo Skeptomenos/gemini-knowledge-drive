@@ -11,6 +11,8 @@ import { SettingsModal } from '@/components/settings/SettingsModal';
 import { WelcomeFlow } from '@/features/onboarding/WelcomeFlow';
 import { useUIStore } from '@/stores/uiStore';
 import { DriveSelector } from '@/features/drive';
+import { ErrorBoundary } from '@/components/ui/ErrorBoundary';
+import { ToastContainer } from '@/components/ui/Toast';
 
 function Header({ onOpenSearch }: { onOpenSearch: () => void }) {
   const { user, logout, isGapiReady } = useAuth();
@@ -170,7 +172,9 @@ function MainContent({ viewType }: { viewType: ViewType }) {
   if (viewType === 'graph') {
     return (
       <div className="flex-1 overflow-hidden">
-        <GraphView mode="global" />
+        <ErrorBoundary name="GraphView">
+          <GraphView mode="global" />
+        </ErrorBoundary>
       </div>
     );
   }
@@ -299,11 +303,20 @@ export function Dashboard() {
     <>
       <AppShell
         header={<Header onOpenSearch={() => setIsSearchOpen(true)} />}
-        sidebar={<Sidebar onOpenSettings={() => setIsSettingsOpen(true)} />}
-        main={<MainContent viewType={viewType} />}
+        sidebar={
+          <ErrorBoundary name="Sidebar">
+            <Sidebar onOpenSettings={() => setIsSettingsOpen(true)} />
+          </ErrorBoundary>
+        }
+        main={
+          <ErrorBoundary name="MainContent">
+            <MainContent viewType={viewType} />
+          </ErrorBoundary>
+        }
       />
       <CommandPalette isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
       <SettingsModal isOpen={isSettingsOpen} onClose={() => setIsSettingsOpen(false)} />
+      <ToastContainer />
     </>
   );
 }
