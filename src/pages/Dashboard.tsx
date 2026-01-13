@@ -1,7 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
 import { useAuth } from '@/features/auth';
-import { DriveSelector } from '@/features/drive';
 import { useSync } from '@/hooks/useSync';
 import { AppShell } from '@/components/layout/AppShell';
 import { Sidebar, Breadcrumbs } from '@/features/navigation';
@@ -9,7 +8,9 @@ import { Workspace } from '@/features/editor';
 import { CommandPalette, searchIndex } from '@/features/search';
 import { GraphView } from '@/features/graph';
 import { SettingsModal } from '@/components/settings/SettingsModal';
+import { WelcomeFlow } from '@/features/onboarding/WelcomeFlow';
 import { useUIStore } from '@/stores/uiStore';
+import { DriveSelector } from '@/features/drive';
 
 function Header({ onOpenSearch }: { onOpenSearch: () => void }) {
   const { user, logout, isGapiReady } = useAuth();
@@ -252,12 +253,25 @@ function MainContent({ viewType }: { viewType: ViewType }) {
 export function Dashboard() {
   const { id } = useParams<{ id: string }>();
   const { setActiveFileId, sidebarMode } = useUIStore();
+  const { syncState, refreshState } = useSync();
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const [showWelcome, setShowWelcome] = useState(false);
 
   useEffect(() => {
     setActiveFileId(id ?? null);
   }, [id, setActiveFileId]);
+
+  useEffect(() => {
+    const onboardingComplete = localStorage.getItem('onboardingComplete');
+    const hasSynced = !!syncState?.lastSync;
+    setShowWelcome(!hasSynced && !onboardingComplete);
+  }, [syncState?.lastSync]);
+
+  const handleWelcomeComplete = async () => {
+    setShowWelcome(false);
+    await refreshState();
+  };
 
   const handleKeyDown = useCallback((e: KeyboardEvent) => {
     if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
@@ -276,6 +290,10 @@ export function Dashboard() {
   }, [handleKeyDown]);
 
   const viewType: ViewType = sidebarMode === 'graph' ? 'graph' : 'files';
+
+  if (showWelcome) {
+    return <WelcomeFlow onComplete={handleWelcomeComplete} />;
+  }
 
   return (
     <>

@@ -9,7 +9,7 @@
 - "Local is Fast" - Mirror metadata to browser's IndexedDB for sub-100ms navigation.
 - "Markdown is King" - First-class support for GFM, Frontmatter, and Wiki-links.
 
-**Status:** Phase 7 Complete - Settings & Preferences implemented. Next: Onboarding & Empty States.
+**Status:** Phase 8 Complete - Onboarding & Empty States implemented. Next: Error Handling & Offline.
 
 ---
 
@@ -314,22 +314,31 @@ Phase 6 (Graph & Search) ◄── Depends on wikilink parsing from Phase 4 ─�
     - Added Cmd+, keyboard shortcut and gear icon in sidebar
     - Wired preferences to Monaco editor (font size, word wrap, minimap, line numbers)
     - Theme toggle (Dark/Light/System) with Tailwind dark mode support
+14. [x] **Phase 8**: Onboarding & Empty States
+    - Created EmptyState.tsx reusable component with icon, title, description, action props
+    - Created WelcomeFlow.tsx multi-step wizard (Welcome, DriveSelection, SyncProgress, Completion)
+    - Updated FileTree.tsx with EmptyState for "No drive" and "No files" states
+    - Updated CommandPalette.tsx with EmptyState for "No results" state
+    - Updated BacklinksPanel.tsx with EmptyState for "No backlinks" state
+    - Updated GraphView.tsx with EmptyState for "No connections" state
+    - Integrated WelcomeFlow into Dashboard.tsx for first-time users
 
 ---
 
-## Phase 8: Onboarding & Empty States (NEXT)
+## Phase 8: Onboarding & Empty States (COMPLETE)
 **Goal:** First-time user experience and graceful empty state handling.
 **Spec Reference:** `09_onboarding_and_empty_states.md`
 
 | Priority | Task | Files | Deliverable |
 |----------|------|-------|-------------|
-| P0 | EmptyState component | `src/components/ui/EmptyState.tsx` | Reusable empty state with icon, message, action |
-| P0 | WelcomeFlow wizard | `src/features/onboarding/WelcomeFlow.tsx` | First-time Drive selection + sync progress |
-| P1 | Empty file tree state | `src/features/navigation/FileTree.tsx` | "No markdown files" message |
-| P1 | Empty search results | `src/features/search/CommandPalette.tsx` | Improved "No results" message |
-| P1 | Empty backlinks panel | `src/features/graph/BacklinksPanel.tsx` | "No backlinks yet" message |
+| DONE | EmptyState component | `src/components/ui/EmptyState.tsx` | Reusable empty state with icon, message, action |
+| DONE | WelcomeFlow wizard | `src/features/onboarding/WelcomeFlow.tsx` | First-time Drive selection + sync progress |
+| DONE | Empty file tree state | `src/features/navigation/FileTree.tsx` | "No markdown files" message |
+| DONE | Empty search results | `src/features/search/CommandPalette.tsx` | Improved "No results" message |
+| DONE | Empty backlinks panel | `src/features/graph/BacklinksPanel.tsx` | "No backlinks yet" message |
+| DONE | Empty graph view | `src/features/graph/GraphView.tsx` | "No connections yet" message |
 
-**Checkpoint:** New users see welcome wizard, empty states are informative.
+**Checkpoint:** New users see welcome wizard, empty states are informative. ✅ COMPLETE
 
 ---
 
@@ -352,4 +361,4 @@ Phase 6 (Graph & Search) ◄── Depends on wikilink parsing from Phase 4 ─�
 
 *Generated: 2026-01-13*
 *Updated: 2026-01-14*
-*Status: Phase 7 Complete - Settings & Preferences implemented*
+*Status: Phase 8 Complete - Onboarding & Empty States implemented*

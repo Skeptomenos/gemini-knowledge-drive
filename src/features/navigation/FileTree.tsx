@@ -2,6 +2,7 @@ import { useLiveQuery } from 'dexie-react-hooks';
 import { db, type FileNode } from '@/lib/db';
 import { useUIStore } from '@/stores/uiStore';
 import { FileItem } from './FileItem';
+import { EmptyState, EmptyStateIcons } from '@/components/ui/EmptyState';
 
 const FOLDER_MIME_TYPE = 'application/vnd.google-apps.folder';
 
@@ -73,17 +74,23 @@ export function FileTree() {
 
   if (!syncState?.driveId) {
     return (
-      <div className="p-4 text-gkd-text-muted text-sm">
-        No drive connected. Select a drive to get started.
-      </div>
+      <EmptyState
+        icon={EmptyStateIcons.folder}
+        title="No drive connected"
+        description="Select a Shared Drive to get started with your knowledge base."
+        variant="compact"
+      />
     );
   }
 
   if (!rootItems || rootItems.length === 0) {
     return (
-      <div className="p-4 text-gkd-text-muted text-sm">
-        No files found. Try syncing your drive.
-      </div>
+      <EmptyState
+        icon={EmptyStateIcons.document}
+        title="No markdown files found"
+        description="This folder doesn't contain any .md files yet."
+        variant="compact"
+      />
     );
   }
 

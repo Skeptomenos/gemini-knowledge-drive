@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getBacklinks, type BacklinkInfo } from './builder';
 import { useUIStore } from '@/stores/uiStore';
+import { EmptyState, EmptyStateIcons } from '@/components/ui/EmptyState';
 
 interface BacklinksPanelProps {
   fileId: string;
@@ -68,9 +69,14 @@ export function BacklinksPanel({ fileId }: BacklinksPanelProps) {
       {isExpanded && (
         <div className="mt-3 space-y-2">
           {backlinks.length === 0 ? (
-            <p className="text-sm text-gkd-text-muted pl-6">
-              No other files link to this page
-            </p>
+            <div className="pl-6">
+              <EmptyState
+                icon={EmptyStateIcons.link}
+                title="No backlinks yet"
+                description="Other files haven't linked to this note."
+                variant="compact"
+              />
+            </div>
           ) : (
             backlinks.map((backlink) => (
               <button

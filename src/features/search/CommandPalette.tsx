@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { searchIndex, type SearchResultItem } from './indexer';
 import { useUIStore } from '@/stores/uiStore';
+import { EmptyState, EmptyStateIcons } from '@/components/ui/EmptyState';
 
 interface CommandPaletteProps {
   isOpen: boolean;
@@ -155,9 +156,12 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
         )}
 
         {query && results.length === 0 && (
-          <div className="px-4 py-8 text-center text-gkd-text-muted">
-            No files found for "{query}"
-          </div>
+          <EmptyState
+            icon={EmptyStateIcons.search}
+            title={`No results for "${query}"`}
+            description="Try a different search term or check spelling."
+            variant="compact"
+          />
         )}
 
         {!query && (

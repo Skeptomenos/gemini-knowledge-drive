@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import ForceGraph2D from 'react-force-graph-2d';
 import { buildGraphData, buildLocalGraphData, type GraphData, type GraphNode } from './builder';
 import { useUIStore } from '@/stores/uiStore';
+import { EmptyState, EmptyStateIcons } from '@/components/ui/EmptyState';
 
 interface GraphViewProps {
   mode: 'global' | 'local';
@@ -117,8 +118,12 @@ export function GraphView({ mode, centerFileId, depth = 1 }: GraphViewProps) {
 
   if (graphData.nodes.length === 0) {
     return (
-      <div className="flex items-center justify-center h-full text-gkd-text-muted">
-        No files to display in graph
+      <div className="flex items-center justify-center h-full">
+        <EmptyState
+          icon={EmptyStateIcons.graph}
+          title="No connections yet"
+          description="Start linking notes with [[wikilinks]] to see your knowledge graph grow."
+        />
       </div>
     );
   }
