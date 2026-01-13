@@ -9,7 +9,7 @@
 - "Local is Fast" - Mirror metadata to browser's IndexedDB for sub-100ms navigation.
 - "Markdown is King" - First-class support for GFM, Frontmatter, and Wiki-links.
 
-**Status:** Phase 1 Complete - Foundation & Authentication implemented.
+**Status:** Phase 2 Complete - Data Engine & Sync Core implemented.
 
 ---
 
@@ -272,10 +272,15 @@ Phase 6 (Graph & Search) ◄── Depends on wikilink parsing from Phase 4 ─�
 2. [x] **Phase 1**: Configure Tailwind CSS with dark mode
 3. [x] **Phase 1**: Set up Firebase Hosting
 4. [x] **Phase 1**: Implement Google OAuth flow
-5. [ ] **Phase 2**: Define Dexie schema and implement SyncManager
-6. [ ] Continue through phases sequentially...
+5. [x] **Phase 2**: Define Dexie schema and implement SyncManager
+6. [x] **Phase 2**: Drive API wrappers (listFiles, fetchChanges, getFileContent)
+7. [x] **Phase 2**: Full sync + Incremental sync implementation
+8. [x] **Phase 2**: useSync hook and DriveSelector UI
+9. [ ] **Phase 3**: Navigation & UI Shell
+10. [ ] Continue through phases sequentially...
 
 ---
 
 *Generated: 2026-01-13*
-*Status: Phase 1 Complete - Ready for Phase 2*
+*Updated: 2026-01-13*
+*Status: Phase 2 Complete - Ready for Phase 3*
