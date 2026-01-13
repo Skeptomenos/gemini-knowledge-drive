@@ -9,7 +9,7 @@
 - "Local is Fast" - Mirror metadata to browser's IndexedDB for sub-100ms navigation.
 - "Markdown is King" - First-class support for GFM, Frontmatter, and Wiki-links.
 
-**Status:** Phase 3 Complete - Navigation & UI Shell implemented.
+**Status:** Phase 4 Complete - Markdown Viewer & Link Resolution implemented.
 
 ---
 
@@ -286,11 +286,19 @@ Phase 6 (Graph & Search) ◄── Depends on wikilink parsing from Phase 4 ─�
    - Created Breadcrumbs.tsx clickable path component
    - Updated Dashboard.tsx to use AppShell layout
    - Wired up file navigation (clicking updates URL and activeFileId)
-10. [ ] **Phase 4**: Markdown Viewer & Link Resolution
-11. [ ] Continue through phases sequentially...
+10. [x] **Phase 4**: Markdown Viewer & Link Resolution
+    - Installed markdown-it, gray-matter, dompurify, shiki
+    - Created parser.ts with markdown-it configuration (wikilinks, task-lists, anchors)
+    - Created wikilink-plugin.ts for [[Link]] syntax parsing
+    - Created MarkdownPreview.tsx with content fetching and wikilink click handling
+    - Created FrontmatterTable.tsx for displaying tags/status/aliases
+    - Added code block wrapper with copy-to-clipboard button
+    - Wired MarkdownPreview into Dashboard replacing placeholder
+11. [ ] **Phase 5**: Editor & Write Operations
+12. [ ] **Phase 6**: Graph, Search & Analytics
 
 ---
 
 *Generated: 2026-01-13*
 *Updated: 2026-01-13*
-*Status: Phase 3 Complete - Ready for Phase 4*
+*Status: Phase 4 Complete - Ready for Phase 5*

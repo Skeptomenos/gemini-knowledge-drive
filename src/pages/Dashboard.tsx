@@ -5,6 +5,7 @@ import { DriveSelector } from '@/features/drive';
 import { useSync } from '@/hooks/useSync';
 import { AppShell } from '@/components/layout/AppShell';
 import { Sidebar, Breadcrumbs } from '@/features/navigation';
+import { MarkdownPreview } from '@/features/viewer';
 import { useUIStore } from '@/stores/uiStore';
 
 function Header() {
@@ -153,14 +154,7 @@ function MainContent() {
       <div className="flex-1 overflow-auto p-6">
         {activeFileId ? (
           <div className="max-w-3xl mx-auto">
-            <div className="bg-gkd-surface rounded-lg p-6 border border-gkd-border">
-              <p className="text-gkd-text-muted text-sm">
-                Markdown viewer coming in Phase 4
-              </p>
-              <p className="text-sm mt-2">
-                File ID: <code className="bg-gkd-bg px-2 py-1 rounded">{activeFileId}</code>
-              </p>
-            </div>
+            <MarkdownPreview fileId={activeFileId} />
           </div>
         ) : (
           <div className="max-w-2xl mx-auto space-y-6">
