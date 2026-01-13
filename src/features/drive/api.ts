@@ -138,6 +138,51 @@ export async function getFileContent(
   return response.text();
 }
 
+export async function getFileMetadata(
+  accessToken: string,
+  fileId: string
+): Promise<{ modifiedTime: string; version: string }> {
+  return driveRequest<{ modifiedTime: string; version: string }>(
+    `/files/${fileId}`,
+    accessToken,
+    {
+      fields: 'modifiedTime,version',
+      supportsAllDrives: 'true',
+    }
+  );
+}
+
+export async function updateFileContent(
+  accessToken: string,
+  fileId: string,
+  content: string
+): Promise<{ modifiedTime: string; version: string }> {
+  const UPLOAD_API_BASE = 'https://www.googleapis.com/upload/drive/v3';
+  const url = `${UPLOAD_API_BASE}/files/${fileId}?uploadType=media&supportsAllDrives=true`;
+
+  const response = await fetch(url, {
+    method: 'PATCH',
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+      'Content-Type': 'text/markdown',
+    },
+    body: content,
+  });
+
+  if (!response.ok) {
+    const error = await response.json().catch(() => ({}));
+    throw new Error(
+      error.error?.message || `Failed to update file: ${response.status}`
+    );
+  }
+
+  const result = await response.json();
+  return {
+    modifiedTime: result.modifiedTime,
+    version: result.version,
+  };
+}
+
 export function isMarkdownFile(file: DriveFile): boolean {
   if (MARKDOWN_MIME_TYPES.includes(file.mimeType)) {
     return true;

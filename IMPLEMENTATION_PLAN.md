@@ -9,7 +9,7 @@
 - "Local is Fast" - Mirror metadata to browser's IndexedDB for sub-100ms navigation.
 - "Markdown is King" - First-class support for GFM, Frontmatter, and Wiki-links.
 
-**Status:** Phase 4 Complete - Markdown Viewer & Link Resolution implemented.
+**Status:** Phase 5 In Progress - Editor Core implemented (Monaco, Autosave, Wikilink Autocomplete).
 
 ---
 
@@ -180,11 +180,11 @@ src/
 
 | Priority | Task | Files | Deliverable |
 |----------|------|-------|-------------|
-| P0 | Monaco Editor wrapper | `src/features/editor/MonacoWrapper.tsx` | vs-dark theme, markdown lang |
-| P0 | Workspace switcher | `src/features/editor/Workspace.tsx` | Toggle Read/Edit mode |
-| P0 | Auto-save with debounce | `src/features/editor/MonacoWrapper.tsx` | 2s debounce, "Saving..." indicator |
-| P0 | Manual save (Ctrl+S) | `src/features/editor/MonacoWrapper.tsx` | Immediate push |
-| P0 | Wikilink autocomplete | `src/features/editor/autocomplete.ts` | `[[` trigger, file dropdown |
+| DONE | Monaco Editor wrapper | `src/features/editor/MonacoWrapper.tsx` | vs-dark theme, markdown lang |
+| DONE | Workspace switcher | `src/features/editor/Workspace.tsx` | Toggle Read/Edit mode |
+| DONE | Auto-save with debounce | `src/features/editor/MonacoWrapper.tsx` | 2s debounce, "Saving..." indicator |
+| DONE | Manual save (Ctrl+S) | `src/features/editor/MonacoWrapper.tsx` | Immediate push |
+| DONE | Wikilink autocomplete | `src/features/editor/autocomplete.ts` | `[[` trigger, file dropdown |
 | P1 | Dirty state indicator | `src/stores/uiStore.ts` | "Unsaved Changes" UI |
 | P1 | Concurrency detection | `src/features/editor/` | Check `modifiedTime` before save |
 | P2 | Paste image upload | `src/features/editor/` | Upload to `assets/`, insert markdown |
@@ -294,11 +294,16 @@ Phase 6 (Graph & Search) ◄── Depends on wikilink parsing from Phase 4 ─�
     - Created FrontmatterTable.tsx for displaying tags/status/aliases
     - Added code block wrapper with copy-to-clipboard button
     - Wired MarkdownPreview into Dashboard replacing placeholder
-11. [ ] **Phase 5**: Editor & Write Operations
+11. [/] **Phase 5**: Editor & Write Operations
+    - Installed @monaco-editor/react
+    - Created MonacoWrapper.tsx with vs-dark theme and markdown support
+    - Created Workspace.tsx for switching between View and Edit modes
+    - Implemented auto-save with 2s debounce and manual save (Ctrl+S)
+    - Implemented wikilink autocomplete provider for Monaco
 12. [ ] **Phase 6**: Graph, Search & Analytics
 
 ---
 
 *Generated: 2026-01-13*
 *Updated: 2026-01-13*
-*Status: Phase 4 Complete - Ready for Phase 5*
+*Status: Phase 5 In Progress - Editor Core implemented*

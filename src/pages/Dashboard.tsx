@@ -5,7 +5,7 @@ import { DriveSelector } from '@/features/drive';
 import { useSync } from '@/hooks/useSync';
 import { AppShell } from '@/components/layout/AppShell';
 import { Sidebar, Breadcrumbs } from '@/features/navigation';
-import { MarkdownPreview } from '@/features/viewer';
+import { Workspace } from '@/features/editor';
 import { useUIStore } from '@/stores/uiStore';
 
 function Header() {
@@ -153,9 +153,7 @@ function MainContent() {
 
       <div className="flex-1 overflow-auto p-6">
         {activeFileId ? (
-          <div className="max-w-3xl mx-auto">
-            <MarkdownPreview fileId={activeFileId} />
-          </div>
+          <Workspace fileId={activeFileId} />
         ) : (
           <div className="max-w-2xl mx-auto space-y-6">
             <div className="bg-gkd-surface rounded-lg p-6 border border-gkd-border">

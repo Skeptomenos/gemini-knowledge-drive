@@ -4,6 +4,7 @@ import { create } from 'zustand';
  * Sidebar mode determines what content is shown in the left panel.
  */
 export type SidebarMode = 'explorer' | 'search' | 'starred';
+export type ViewMode = 'read' | 'edit';
 
 /**
  * UI Store - Manages ephemeral UI state for the application.
@@ -15,53 +16,46 @@ export type SidebarMode = 'explorer' | 'search' | 'starred';
  * - Right panel visibility
  */
 interface UIState {
-  /** Currently selected file ID (null if none) */
   activeFileId: string | null;
-  /** Set of expanded folder IDs in the file tree */
   expandedFolders: Set<string>;
-  /** Whether the left sidebar is visible */
   isSidebarOpen: boolean;
-  /** Current sidebar mode */
   sidebarMode: SidebarMode;
-  /** Whether the right panel (graph/backlinks) is visible */
   isRightPanelOpen: boolean;
+  viewMode: ViewMode;
+  isDirty: boolean;
+  saveStatus: 'idle' | 'saving' | 'saved' | 'error';
 }
 
 interface UIActions {
-  /** Set the active file ID */
   setActiveFileId: (id: string | null) => void;
-  /** Toggle a folder's expanded state */
   toggleFolder: (folderId: string) => void;
-  /** Expand a specific folder */
   expandFolder: (folderId: string) => void;
-  /** Collapse a specific folder */
   collapseFolder: (folderId: string) => void;
-  /** Expand multiple folders at once (e.g., for revealing a file path) */
   expandFolders: (folderIds: string[]) => void;
-  /** Toggle sidebar visibility */
   toggleSidebar: () => void;
-  /** Set sidebar open state */
   setSidebarOpen: (open: boolean) => void;
-  /** Set sidebar mode */
   setSidebarMode: (mode: SidebarMode) => void;
-  /** Toggle right panel visibility */
   toggleRightPanel: () => void;
-  /** Set right panel open state */
   setRightPanelOpen: (open: boolean) => void;
+  setViewMode: (mode: ViewMode) => void;
+  toggleViewMode: () => void;
+  setIsDirty: (dirty: boolean) => void;
+  setSaveStatus: (status: 'idle' | 'saving' | 'saved' | 'error') => void;
 }
 
 export type UIStore = UIState & UIActions;
 
 export const useUIStore = create<UIStore>((set) => ({
-  // Initial state
   activeFileId: null,
   expandedFolders: new Set<string>(),
   isSidebarOpen: true,
   sidebarMode: 'explorer',
   isRightPanelOpen: false,
+  viewMode: 'read',
+  isDirty: false,
+  saveStatus: 'idle',
 
-  // Actions
-  setActiveFileId: (id) => set({ activeFileId: id }),
+  setActiveFileId: (id) => set({ activeFileId: id, viewMode: 'read', isDirty: false }),
 
   toggleFolder: (folderId) =>
     set((state) => {
@@ -104,4 +98,14 @@ export const useUIStore = create<UIStore>((set) => ({
   toggleRightPanel: () => set((state) => ({ isRightPanelOpen: !state.isRightPanelOpen })),
 
   setRightPanelOpen: (open) => set({ isRightPanelOpen: open }),
+
+  setViewMode: (mode) => set({ viewMode: mode }),
+
+  toggleViewMode: () => set((state) => ({ 
+    viewMode: state.viewMode === 'read' ? 'edit' : 'read' 
+  })),
+
+  setIsDirty: (dirty) => set({ isDirty: dirty }),
+
+  setSaveStatus: (status) => set({ saveStatus: status }),
 }));
