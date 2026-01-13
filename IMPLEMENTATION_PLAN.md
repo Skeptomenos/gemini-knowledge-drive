@@ -9,7 +9,7 @@
 - "Local is Fast" - Mirror metadata to browser's IndexedDB for sub-100ms navigation.
 - "Markdown is King" - First-class support for GFM, Frontmatter, and Wiki-links.
 
-**Status:** Phase 2 Complete - Data Engine & Sync Core implemented.
+**Status:** Phase 3 Complete - Navigation & UI Shell implemented.
 
 ---
 
@@ -276,11 +276,21 @@ Phase 6 (Graph & Search) ◄── Depends on wikilink parsing from Phase 4 ─�
 6. [x] **Phase 2**: Drive API wrappers (listFiles, fetchChanges, getFileContent)
 7. [x] **Phase 2**: Full sync + Incremental sync implementation
 8. [x] **Phase 2**: useSync hook and DriveSelector UI
-9. [ ] **Phase 3**: Navigation & UI Shell
-10. [ ] Continue through phases sequentially...
+9. [x] **Phase 3**: Navigation & UI Shell
+   - Installed react-resizable-panels and zustand
+   - Created uiStore.ts with activeFileId, expandedFolders, sidebar state
+   - Created AppShell.tsx three-pane layout with resizable panels
+   - Created Sidebar.tsx with Explorer/Search/Starred modes
+   - Created FileTree.tsx recursive folder renderer using useLiveQuery
+   - Created FileItem.tsx individual file/folder row component
+   - Created Breadcrumbs.tsx clickable path component
+   - Updated Dashboard.tsx to use AppShell layout
+   - Wired up file navigation (clicking updates URL and activeFileId)
+10. [ ] **Phase 4**: Markdown Viewer & Link Resolution
+11. [ ] Continue through phases sequentially...
 
 ---
 
 *Generated: 2026-01-13*
 *Updated: 2026-01-13*
-*Status: Phase 2 Complete - Ready for Phase 3*
+*Status: Phase 3 Complete - Ready for Phase 4*
