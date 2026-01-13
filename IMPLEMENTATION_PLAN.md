@@ -9,7 +9,7 @@
 - "Local is Fast" - Mirror metadata to browser's IndexedDB for sub-100ms navigation.
 - "Markdown is King" - First-class support for GFM, Frontmatter, and Wiki-links.
 
-**Status:** Phase 5 In Progress - Editor Core implemented (Monaco, Autosave, Wikilink Autocomplete).
+**Status:** Phase 6 Complete - All core features implemented (Search, Graph, Backlinks).
 
 ---
 
@@ -294,16 +294,23 @@ Phase 6 (Graph & Search) ◄── Depends on wikilink parsing from Phase 4 ─�
     - Created FrontmatterTable.tsx for displaying tags/status/aliases
     - Added code block wrapper with copy-to-clipboard button
     - Wired MarkdownPreview into Dashboard replacing placeholder
-11. [/] **Phase 5**: Editor & Write Operations
+11. [x] **Phase 5**: Editor & Write Operations
     - Installed @monaco-editor/react
     - Created MonacoWrapper.tsx with vs-dark theme and markdown support
     - Created Workspace.tsx for switching between View and Edit modes
     - Implemented auto-save with 2s debounce and manual save (Ctrl+S)
     - Implemented wikilink autocomplete provider for Monaco
-12. [ ] **Phase 6**: Graph, Search & Analytics
+12. [x] **Phase 6**: Graph, Search & Analytics
+    - Installed minisearch and react-force-graph-2d
+    - Created FileSearchIndex with MiniSearch for fuzzy file search
+    - Created CommandPalette component with Cmd+K keyboard shortcut
+    - Created graph data builder for extracting wikilinks and building graph
+    - Created GraphView component with react-force-graph-2d
+    - Created BacklinksPanel showing linked mentions
+    - Wired up search and graph into Dashboard
 
 ---
 
 *Generated: 2026-01-13*
 *Updated: 2026-01-13*
-*Status: Phase 5 In Progress - Editor Core implemented*
+*Status: Phase 6 Complete - All core features implemented*

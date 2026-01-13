@@ -5,6 +5,7 @@ import { getFileContent } from '@/features/drive/api';
 import { db } from '@/lib/db';
 import { parseMarkdown, type ParsedMarkdown } from './parser';
 import { FrontmatterTable } from './FrontmatterTable';
+import { BacklinksPanel } from '@/features/graph';
 
 interface MarkdownPreviewProps {
   fileId: string;
@@ -55,7 +56,7 @@ export function MarkdownPreview({ fileId }: MarkdownPreviewProps) {
     async (target: string) => {
       const normalizedTarget = target.toLowerCase();
 
-      // Query IndexedDB for file by name or alias
+      
       const byName = await db.files
         .where('name')
         .equalsIgnoreCase(normalizedTarget + '.md')
@@ -66,7 +67,7 @@ export function MarkdownPreview({ fileId }: MarkdownPreviewProps) {
         return;
       }
 
-      // Try without .md extension
+      
       const byNameNoExt = await db.files
         .where('name')
         .equalsIgnoreCase(normalizedTarget)
@@ -77,7 +78,7 @@ export function MarkdownPreview({ fileId }: MarkdownPreviewProps) {
         return;
       }
 
-      // Try aliases
+      
       const byAlias = await db.files
         .where('aliases')
         .equals(normalizedTarget)
@@ -88,7 +89,7 @@ export function MarkdownPreview({ fileId }: MarkdownPreviewProps) {
         return;
       }
 
-      // Fallback: partial match on name
+      
       const partialMatch = await db.files
         .filter((file) =>
           file.name.toLowerCase().includes(normalizedTarget) &&
@@ -174,6 +175,7 @@ export function MarkdownPreview({ fileId }: MarkdownPreviewProps) {
         className="prose prose-invert prose-gkd max-w-none"
         dangerouslySetInnerHTML={{ __html: parsed.html }}
       />
+      <BacklinksPanel fileId={fileId} />
     </div>
   );
 }

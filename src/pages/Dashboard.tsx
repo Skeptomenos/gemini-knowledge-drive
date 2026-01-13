@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
 import { useAuth } from '@/features/auth';
 import { DriveSelector } from '@/features/drive';
@@ -6,9 +6,11 @@ import { useSync } from '@/hooks/useSync';
 import { AppShell } from '@/components/layout/AppShell';
 import { Sidebar, Breadcrumbs } from '@/features/navigation';
 import { Workspace } from '@/features/editor';
+import { CommandPalette, searchIndex } from '@/features/search';
+import { GraphView } from '@/features/graph';
 import { useUIStore } from '@/stores/uiStore';
 
-function Header() {
+function Header({ onOpenSearch }: { onOpenSearch: () => void }) {
   const { user, logout, isGapiReady } = useAuth();
   const { toggleSidebar, isSidebarOpen } = useUIStore();
 
@@ -32,6 +34,16 @@ function Header() {
         )}
       </div>
       <div className="flex items-center gap-4">
+        <button
+          onClick={onOpenSearch}
+          className="flex items-center gap-2 px-3 py-1.5 text-sm text-gkd-text-muted hover:text-gkd-text bg-gkd-surface border border-gkd-border rounded-lg transition-colors"
+        >
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+          </svg>
+          <span className="hidden sm:inline">Search</span>
+          <kbd className="hidden sm:inline-block px-1.5 py-0.5 text-xs bg-gkd-bg rounded">⌘K</kbd>
+        </button>
         {user && (
           <div className="flex items-center gap-2">
             <img
@@ -55,7 +67,9 @@ function Header() {
   );
 }
 
-function MainContent() {
+type ViewType = 'files' | 'graph';
+
+function MainContent({ viewType }: { viewType: ViewType }) {
   const { accessToken } = useAuth();
   const { progress, syncState, fileCount, startFullSync, startIncrementalSync, clearData } = useSync();
   const { activeFileId } = useUIStore();
@@ -72,6 +86,12 @@ function MainContent() {
       startIncrementalSync(accessToken);
     }
   }, [accessToken, syncState?.nextPageToken, syncState?.driveId, startIncrementalSync]);
+
+  useEffect(() => {
+    if (syncState?.lastSync && !searchIndex.ready) {
+      searchIndex.buildIndex();
+    }
+  }, [syncState?.lastSync]);
 
   const handleSync = async () => {
     if (!accessToken || !selectedDriveId) return;
@@ -145,6 +165,14 @@ function MainContent() {
     );
   }
 
+  if (viewType === 'graph') {
+    return (
+      <div className="flex-1 overflow-hidden">
+        <GraphView mode="global" />
+      </div>
+    );
+  }
+
   return (
     <div className="flex-1 flex flex-col overflow-hidden">
       <div className="border-b border-gkd-border">
@@ -211,7 +239,7 @@ function MainContent() {
             </div>
 
             <p className="text-center text-gkd-text-muted text-sm">
-              Select a file from the sidebar to view it
+              Select a file from the sidebar to view it, or press ⌘K to search
             </p>
           </div>
         )}
@@ -222,17 +250,35 @@ function MainContent() {
 
 export function Dashboard() {
   const { id } = useParams<{ id: string }>();
-  const { setActiveFileId } = useUIStore();
+  const { setActiveFileId, sidebarMode } = useUIStore();
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
 
   useEffect(() => {
     setActiveFileId(id ?? null);
   }, [id, setActiveFileId]);
 
+  const handleKeyDown = useCallback((e: KeyboardEvent) => {
+    if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+      e.preventDefault();
+      setIsSearchOpen(true);
+    }
+  }, []);
+
+  useEffect(() => {
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [handleKeyDown]);
+
+  const viewType: ViewType = sidebarMode === 'graph' ? 'graph' : 'files';
+
   return (
-    <AppShell
-      header={<Header />}
-      sidebar={<Sidebar />}
-      main={<MainContent />}
-    />
+    <>
+      <AppShell
+        header={<Header onOpenSearch={() => setIsSearchOpen(true)} />}
+        sidebar={<Sidebar />}
+        main={<MainContent viewType={viewType} />}
+      />
+      <CommandPalette isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
+    </>
   );
 }

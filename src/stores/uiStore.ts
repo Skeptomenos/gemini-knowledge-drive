@@ -3,7 +3,7 @@ import { create } from 'zustand';
 /**
  * Sidebar mode determines what content is shown in the left panel.
  */
-export type SidebarMode = 'explorer' | 'search' | 'starred';
+export type SidebarMode = 'explorer' | 'search' | 'starred' | 'graph';
 export type ViewMode = 'read' | 'edit';
 
 /**

@@ -3,7 +3,7 @@ import { FileTree } from './FileTree';
 
 const SIDEBAR_MODES: { mode: SidebarMode; label: string; icon: string }[] = [
   { mode: 'explorer', label: 'Explorer', icon: '📁' },
-  { mode: 'search', label: 'Search', icon: '🔍' },
+  { mode: 'graph', label: 'Graph', icon: '🕸️' },
   { mode: 'starred', label: 'Starred', icon: '⭐' },
 ];
 
@@ -40,9 +40,10 @@ export function Sidebar() {
 
       <div className="flex-1 overflow-auto">
         {sidebarMode === 'explorer' && <FileTree />}
-        {sidebarMode === 'search' && (
+        {sidebarMode === 'graph' && (
           <div className="p-4 text-gkd-text-muted text-sm">
-            Search coming in Phase 6
+            <p className="mb-2">Graph view is displayed in the main panel.</p>
+            <p>Click on nodes to navigate to files.</p>
           </div>
         )}
         {sidebarMode === 'starred' && (
