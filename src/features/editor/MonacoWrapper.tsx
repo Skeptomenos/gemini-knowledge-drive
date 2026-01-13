@@ -21,6 +21,7 @@ export function MonacoWrapper({ fileId, initialContent, onContentChange }: Monac
   const editorRef = useRef<editor.IStandaloneCodeEditor | null>(null);
   const contentRef = useRef(initialContent);
   const fileIdRef = useRef(fileId);
+  const debouncedSaveRef = useRef<ReturnType<typeof debounce> | null>(null);
 
   useEffect(() => {
     fileIdRef.current = fileId;
@@ -42,18 +43,16 @@ export function MonacoWrapper({ fileId, initialContent, onContentChange }: Monac
   }, [accessToken, setSaveStatus, setIsDirty]);
 
   const autoSaveDelayMs = autoSaveDelay * 1000;
-  
-  const debouncedSave = useRef(
-    debounce((content: string) => {
-      saveToServer(content);
-    }, autoSaveDelayMs)
-  ).current;
 
   useEffect(() => {
+    debouncedSaveRef.current = debounce((content: string) => {
+      saveToServer(content);
+    }, autoSaveDelayMs);
+
     return () => {
-      debouncedSave.cancel();
+      debouncedSaveRef.current?.cancel();
     };
-  }, [debouncedSave]);
+  }, [autoSaveDelayMs, saveToServer]);
 
   const handleChange: OnChange = useCallback((value) => {
     if (value === undefined) return;
@@ -61,8 +60,8 @@ export function MonacoWrapper({ fileId, initialContent, onContentChange }: Monac
     contentRef.current = value;
     setIsDirty(true);
     onContentChange?.(value);
-    debouncedSave(value);
-  }, [setIsDirty, onContentChange, debouncedSave]);
+    debouncedSaveRef.current?.(value);
+  }, [setIsDirty, onContentChange]);
 
   const handleMount: OnMount = useCallback((editor, monaco) => {
     editorRef.current = editor;
@@ -70,12 +69,12 @@ export function MonacoWrapper({ fileId, initialContent, onContentChange }: Monac
     registerWikilinkCompletion(monaco);
 
     editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyS, () => {
-      debouncedSave.cancel();
+      debouncedSaveRef.current?.cancel();
       saveToServer(contentRef.current);
     });
 
     editor.focus();
-  }, [debouncedSave, saveToServer]);
+  }, [saveToServer]);
 
   return (
     <div className="h-full w-full">

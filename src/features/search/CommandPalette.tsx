@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { searchIndex, type SearchResultItem } from './indexer';
 import { useUIStore } from '@/stores/uiStore';
@@ -10,34 +10,32 @@ interface CommandPaletteProps {
 }
 
 export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
+  if (!isOpen) return null;
+  return <CommandPaletteInner onClose={onClose} />;
+}
+
+function CommandPaletteInner({ onClose }: { onClose: () => void }) {
   const navigate = useNavigate();
   const { setActiveFileId } = useUIStore();
   const [query, setQuery] = useState('');
-  const [results, setResults] = useState<SearchResultItem[]>([]);
   const [selectedIndex, setSelectedIndex] = useState(0);
+  const [prevResultsLength, setPrevResultsLength] = useState(0);
   const inputRef = useRef<HTMLInputElement>(null);
   const listRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    if (isOpen) {
-      setQuery('');
-      setResults([]);
-      setSelectedIndex(0);
-      inputRef.current?.focus();
-    }
-  }, [isOpen]);
-
-  useEffect(() => {
-    if (!query.trim()) {
-      setResults([]);
-      setSelectedIndex(0);
-      return;
-    }
-
-    const searchResults = searchIndex.search(query, 15);
-    setResults(searchResults);
-    setSelectedIndex(0);
+  const results = useMemo<SearchResultItem[]>(() => {
+    if (!query.trim()) return [];
+    return searchIndex.search(query, 15);
   }, [query]);
+
+  if (results.length !== prevResultsLength) {
+    setPrevResultsLength(results.length);
+    setSelectedIndex(0);
+  }
+
+  useEffect(() => {
+    inputRef.current?.focus();
+  }, []);
 
   useEffect(() => {
     const selectedElement = listRef.current?.children[selectedIndex] as HTMLElement;
@@ -72,8 +70,6 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
         break;
     }
   }, [results, selectedIndex, handleSelect, onClose]);
-
-  if (!isOpen) return null;
 
   return (
     <div 

@@ -39,8 +39,19 @@ export function useSync(): UseSyncResult {
   }, []);
 
   useEffect(() => {
-    refreshState();
-  }, [refreshState]);
+    let cancelled = false;
+    
+    (async () => {
+      const state = await getSyncState();
+      const count = await getFileCount();
+      if (!cancelled) {
+        setSyncState(state || null);
+        setFileCount(count);
+      }
+    })();
+    
+    return () => { cancelled = true; };
+  }, []);
 
   const startFullSync = useCallback(
     async (accessToken: string, driveId: string) => {

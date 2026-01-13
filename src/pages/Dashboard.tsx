@@ -77,13 +77,15 @@ function MainContent({ viewType }: { viewType: ViewType }) {
   const { accessToken } = useAuth();
   const { progress, syncState, fileCount, startFullSync, startIncrementalSync, clearData } = useSync();
   const { activeFileId } = useUIStore();
-  const [selectedDriveId, setSelectedDriveId] = useState<string | null>(null);
+  const [selectedDriveId, setSelectedDriveId] = useState<string | null>(syncState?.driveId ?? null);
+  const [prevDriveId, setPrevDriveId] = useState<string | null>(syncState?.driveId ?? null);
 
-  useEffect(() => {
+  if ((syncState?.driveId ?? null) !== prevDriveId) {
+    setPrevDriveId(syncState?.driveId ?? null);
     if (syncState?.driveId) {
       setSelectedDriveId(syncState.driveId);
     }
-  }, [syncState?.driveId]);
+  }
 
   useEffect(() => {
     if (accessToken && syncState?.nextPageToken && syncState?.driveId) {
@@ -260,17 +262,22 @@ export function Dashboard() {
   const { syncState, refreshState } = useSync();
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
-  const [showWelcome, setShowWelcome] = useState(false);
+  const [showWelcome, setShowWelcome] = useState(() => {
+    const onboardingComplete = localStorage.getItem('onboardingComplete');
+    return !onboardingComplete;
+  });
+  const [prevLastSync, setPrevLastSync] = useState<number | null>(syncState?.lastSync ?? null);
 
   useEffect(() => {
     setActiveFileId(id ?? null);
   }, [id, setActiveFileId]);
 
-  useEffect(() => {
+  if ((syncState?.lastSync ?? null) !== prevLastSync) {
+    setPrevLastSync(syncState?.lastSync ?? null);
     const onboardingComplete = localStorage.getItem('onboardingComplete');
     const hasSynced = !!syncState?.lastSync;
     setShowWelcome(!hasSynced && !onboardingComplete);
-  }, [syncState?.lastSync]);
+  }
 
   const handleWelcomeComplete = async () => {
     setShowWelcome(false);

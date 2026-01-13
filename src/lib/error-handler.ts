@@ -1,4 +1,4 @@
-import { toast } from '@/components/ui/Toast';
+import { toast } from '@/stores/toastStore';
 import { markOfflineFromApiFailure } from '@/stores/networkStore';
 
 export type ErrorCategory = 'auth' | 'drive' | 'sync' | 'save' | 'network' | 'unknown';
