@@ -119,6 +119,12 @@ export async function fetchChanges(
   return driveRequest<DriveChangesResponse>('/changes', accessToken, params);
 }
 
+export interface FileContentResult {
+  content: string;
+  modifiedTime: string;
+  version: string;
+}
+
 export async function getFileContent(
   accessToken: string,
   fileId: string
@@ -136,6 +142,26 @@ export async function getFileContent(
   }
 
   return response.text();
+}
+
+/**
+ * Fetches file content along with metadata for concurrency detection.
+ * Returns both the content and the modifiedTime to track when the file was loaded.
+ */
+export async function getFileContentWithMetadata(
+  accessToken: string,
+  fileId: string
+): Promise<FileContentResult> {
+  const [content, metadata] = await Promise.all([
+    getFileContent(accessToken, fileId),
+    getFileMetadata(accessToken, fileId),
+  ]);
+
+  return {
+    content,
+    modifiedTime: metadata.modifiedTime,
+    version: metadata.version,
+  };
 }
 
 export async function getFileMetadata(

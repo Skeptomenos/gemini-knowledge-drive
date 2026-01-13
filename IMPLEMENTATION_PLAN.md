@@ -9,7 +9,7 @@
 - "Local is Fast" - Mirror metadata to browser's IndexedDB for sub-100ms navigation.
 - "Markdown is King" - First-class support for GFM, Frontmatter, and Wiki-links.
 
-**Status:** Phase 9 Complete - Error Handling & Offline implemented.
+**Status:** Phase 10 Complete - Polish & P1 Completion implemented.
 
 ---
 
@@ -368,6 +368,20 @@ Phase 6 (Graph & Search) ◄── Depends on wikilink parsing from Phase 4 ─�
 
 ---
 
+## Phase 10: Polish & P1 Completion (COMPLETE)
+**Goal:** Complete remaining P1 tasks from earlier phases and add missing infrastructure.
+**Spec Reference:** `06_editor_capabilities.md` (Concurrency Handling)
+
+| Priority | Task | Files | Deliverable |
+|----------|------|-------|-------------|
+| DONE | Dirty state indicator | `src/stores/uiStore.ts`, `src/features/editor/Workspace.tsx` | "Unsaved changes" UI with save status |
+| DONE | Concurrency detection | `src/features/editor/MonacoWrapper.tsx`, `src/features/drive/api.ts` | Check `modifiedTime` before save, conflict dialog |
+| DONE | Vite TypeScript support | `src/vite-env.d.ts` | Proper Vite environment type definitions |
+
+**Checkpoint:** Editor detects concurrent edits and prompts user before overwriting. ✅ COMPLETE
+
+---
+
 *Generated: 2026-01-13*
 *Updated: 2026-01-14*
-*Status: Phase 9 Complete - Error Handling & Offline implemented*
+*Status: Phase 10 Complete - Polish & P1 Completion implemented*

@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useAuth } from '@/features/auth';
-import { getFileContent } from '@/features/drive/api';
+import { getFileContentWithMetadata } from '@/features/drive/api';
 import { useUIStore } from '@/stores/uiStore';
 import { MarkdownPreview } from '@/features/viewer';
 import { MonacoWrapper } from './MonacoWrapper';
@@ -17,6 +17,7 @@ export function Workspace({ fileId }: WorkspaceProps) {
   
   const [loadState, setLoadState] = useState<LoadingState>('loading');
   const [content, setContent] = useState<string>('');
+  const [loadedModifiedTime, setLoadedModifiedTime] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -29,9 +30,10 @@ export function Workspace({ fileId }: WorkspaceProps) {
       setError(null);
 
       try {
-        const fileContent = await getFileContent(accessToken!, fileId);
+        const result = await getFileContentWithMetadata(accessToken!, fileId);
         if (cancelled) return;
-        setContent(fileContent);
+        setContent(result.content);
+        setLoadedModifiedTime(result.modifiedTime);
         setLoadState('success');
       } catch (err) {
         if (cancelled) return;
@@ -138,6 +140,7 @@ export function Workspace({ fileId }: WorkspaceProps) {
           <MonacoWrapper
             fileId={fileId}
             initialContent={content}
+            loadedModifiedTime={loadedModifiedTime}
             onContentChange={handleContentChange}
           />
         )}
