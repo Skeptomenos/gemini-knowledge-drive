@@ -1,3 +1,7 @@
+import { Buffer } from 'buffer';
+// @ts-expect-error Polyfill Buffer for browser environment
+window.Buffer = Buffer;
+
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'

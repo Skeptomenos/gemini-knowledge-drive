@@ -41,6 +41,8 @@ const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID as string;
 const SCOPES = [
   'https://www.googleapis.com/auth/drive',
   'https://www.googleapis.com/auth/drive.install',
+  'https://www.googleapis.com/auth/userinfo.profile',
+  'https://www.googleapis.com/auth/userinfo.email',
 ].join(' ');
 
 const GIS_SCRIPT_URL = 'https://accounts.google.com/gsi/client';

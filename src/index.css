@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@plugin "@tailwindcss/typography";
 
 /*
  * Gemini Knowledge Drive - Base Styles
@@ -10,11 +11,112 @@
   --color-gkd-bg: #0f0f0f;
   --color-gkd-surface: #1a1a1a;
   --color-gkd-surface-hover: #242424;
-  --color-gkd-border: #2a2a2a;
-  --color-gkd-text: rgba(255, 255, 255, 0.87);
-  --color-gkd-text-muted: rgba(255, 255, 255, 0.6);
-  --color-gkd-accent: #646cff;
-  --color-gkd-accent-hover: #535bf2;
+  --color-gkd-border: #333333;
+  --color-gkd-text: #e6e6e6;
+  --color-gkd-text-muted: #a1a1a1;
+  --color-gkd-accent: #7c3aed;
+  --color-gkd-accent-hover: #6d28d9;
+}
+
+/* Custom Typography Theme (Obsidian Style) */
+@layer utilities {
+  .prose-gkd {
+    --tw-prose-body: var(--color-gkd-text);
+    --tw-prose-headings: #ffffff;
+    --tw-prose-lead: var(--color-gkd-text-muted);
+    --tw-prose-links: #a78bfa;
+    --tw-prose-bold: #ffffff;
+    --tw-prose-counters: var(--color-gkd-text-muted);
+    --tw-prose-bullets: var(--color-gkd-text-muted);
+    --tw-prose-hr: var(--color-gkd-border);
+    --tw-prose-quotes: var(--color-gkd-text-muted);
+    --tw-prose-quote-borders: var(--color-gkd-border);
+    --tw-prose-captions: var(--color-gkd-text-muted);
+    --tw-prose-code: #ff79c6;
+    --tw-prose-pre-code: #f8f8f2;
+    --tw-prose-pre-bg: #282a36;
+    --tw-prose-th-borders: var(--color-gkd-border);
+    --tw-prose-td-borders: var(--color-gkd-border);
+    
+    font-size: 1rem;
+    line-height: 1.6;
+    max-width: 85ch;
+  }
+
+  /* Specific Overrides for Obsidian feel */
+  .prose-gkd h1 {
+    font-weight: 700;
+    margin-top: 0;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--color-gkd-border);
+  }
+
+  .prose-gkd h2 {
+    font-weight: 600;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    padding-bottom: 0.3rem;
+    border-bottom: 1px solid var(--color-gkd-border);
+  }
+
+  .prose-gkd a {
+    text-decoration: none;
+    font-weight: 500;
+  }
+  
+  .prose-gkd a:hover {
+    text-decoration: underline;
+  }
+
+  .prose-gkd blockquote {
+    border-left-color: var(--color-gkd-accent);
+    background: rgba(124, 58, 237, 0.1);
+    padding: 0.5rem 1rem;
+    border-radius: 0.25rem;
+    font-style: normal;
+  }
+
+  .prose-gkd pre {
+    border-radius: 0.5rem;
+    border: 1px solid var(--color-gkd-border);
+    background-color: #161616; /* Darker than surface */
+  }
+  
+  .prose-gkd code {
+    background-color: rgba(255, 255, 255, 0.1);
+    padding: 0.2em 0.4em;
+    border-radius: 0.25em;
+    font-weight: 400;
+  }
+  
+  .prose-gkd pre code {
+    background-color: transparent;
+    padding: 0;
+  }
+
+  .prose-gkd table {
+    width: 100%;
+    margin-top: 1.5em;
+    margin-bottom: 1.5em;
+    border-collapse: collapse;
+  }
+
+  .prose-gkd thead th {
+    text-align: left;
+    padding: 0.75rem;
+    background-color: var(--color-gkd-surface);
+    border: 1px solid var(--color-gkd-border);
+  }
+
+  .prose-gkd tbody td {
+    padding: 0.75rem;
+    border: 1px solid var(--color-gkd-border);
+  }
+  
+  .prose-gkd tr:nth-child(even) {
+    background-color: rgba(255, 255, 255, 0.02);
+  }
 }
 
 /* Base styles */
