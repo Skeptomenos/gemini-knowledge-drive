@@ -47,7 +47,15 @@ Create `.env` based on `.env.example`:
 VITE_GOOGLE_CLIENT_ID=your-client-id.apps.googleusercontent.com
 ```
 
-4. Run locally
+4. Configure Google Cloud Console
+   - Go to [Google Cloud Console](https://console.cloud.google.com/apis/credentials)
+   - Create or select an OAuth 2.0 Client ID
+   - Add authorized JavaScript origins:
+     - `http://localhost:5173` (development)
+     - Your production domain
+   - Enable the Google Drive API
+
+5. Run locally
 ```bash
 npm run dev
 ```
@@ -61,8 +69,18 @@ npm run build
 
 2. **Deploy to Firebase**:
 ```bash
-firebase deploy
+npx firebase-tools deploy
 ```
+
+See [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) for detailed deployment instructions.
+
+## Documentation
+
+- [Architecture](docs/ARCHITECTURE.md) - System design and patterns
+- [Authentication](docs/AUTHENTICATION.md) - Google Sign-In implementation
+- [Deployment](docs/DEPLOYMENT.md) - Firebase hosting setup
+- [Styling](docs/STYLING.md) - Tailwind CSS v4 configuration
+- [Error Handling](docs/ERROR_HANDLING.md) - Error handling patterns
 
 ## License
 
